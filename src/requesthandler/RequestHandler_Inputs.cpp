@@ -430,6 +430,36 @@ RequestResult RequestHandler::SetInputMute(const Request &request)
 }
 
 /**
+ * Gets the audio mono state of an input.
+ *
+ * @requestField inputName | String | Name of input to get the mono state of
+ *
+ * @responseField inputMono | Boolean | Whether the input is mono
+ *
+ * @requestType GetInputMono
+ * @complexity 2
+ * @rpcVersion -1
+ * @initialVersion 5.0.0
+ * @api requests
+ * @category inputs
+ */
+RequestResult RequestHandler::GetInputMono(const Request &request)
+{
+	RequestStatus::RequestStatus statusCode;
+	std::string comment;
+	OBSSourceAutoRelease input = request.ValidateInput("inputName", statusCode, comment);
+	if (!input)
+		return RequestResult::Error(statusCode, comment);
+
+	if (!(obs_source_get_output_flags(input) & OBS_SOURCE_AUDIO))
+		return RequestResult::Error(RequestStatus::InvalidResourceState, "The specified input does not support audio.");
+
+	json responseData;
+	responseData["inputMono"] = obs_source_get_flags(input);
+	return RequestResult::Success(responseData);
+}
+
+/**
  * Toggles the audio mute state of an input.
  *
  * @requestField inputName | String | Name of the input to toggle the mute state of

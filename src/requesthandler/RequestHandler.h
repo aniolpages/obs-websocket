@@ -104,6 +104,7 @@ private:
 	RequestResult SetInputSettings(const Request &);
 	RequestResult GetInputMute(const Request &);
 	RequestResult SetInputMute(const Request &);
+	RequestResult GetInputMono(const Request &);
 	RequestResult ToggleInputMute(const Request &);
 	RequestResult GetInputVolume(const Request &);
 	RequestResult SetInputVolume(const Request &);
